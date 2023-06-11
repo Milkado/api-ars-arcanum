@@ -1,0 +1,27 @@
+version: '3'
+services:
+  mysql:
+    image: "mysql"
+    container_name: "mysql"
+    environment:
+      - MYSQL_USER=api_ars_arcanum
+      - MYSQL_PASSWORD=khriss@ars_arcanum
+      - MYSQL_ROOT_PASSWORD=Milkado@1
+      - MYSQL_DATABASE=ars_arcanum      
+    ports:
+      - "5432:3306"
+    volumes:
+      - ./ars_arcanum:/var/lib/mysql  
+
+  phpmyadmin-compose:
+    image: phpmyadmin
+    restart: always
+    environment:
+      PMA_USER: "root"
+      PMA_PASSWORD: "Milkado@1"
+      PMA_HOSTS: "mysql"
+      PMA_PORT: "3306"
+    ports:
+      - "54321:80"
+    depends_on:
+      - mysql
