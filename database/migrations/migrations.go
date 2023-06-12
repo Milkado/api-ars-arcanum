@@ -11,7 +11,7 @@ func main() {
 	database.ConnectDb()
 	fmt.Println("Migrating...")
 	database.DB.AutoMigrate(
-		&models.Shard{}, &models.MagicSystem{}, &models.Power{}, &models.NahelBond{}, &models.AllomanticTable{},
+		&models.Shard{}, &models.MagicSystem{}, &models.Power{}, &models.NahelBond{}, &models.AllomanticTable{}, &models.User{},
 	)
 	fmt.Println("Migration complete!")
 }

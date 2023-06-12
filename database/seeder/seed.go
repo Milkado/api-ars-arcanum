@@ -9,8 +9,9 @@ import (
 func main() {
 	database.ConnectDb()
 	database.DB.Transaction(func(tx *gorm.DB) error {
-		seeds.SeedShards()
-		seeds.SeedMagicSystems()
+		// seeds.SeedShards()
+		// seeds.SeedMagicSystems()
+		seeds.SeedUser()
 		return nil
 	})
 
