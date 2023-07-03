@@ -6,19 +6,20 @@ import (
 	"github.com/Milkado/api-ars-arcanum/database"
 	"github.com/Milkado/api-ars-arcanum/models"
 	"github.com/gin-gonic/gin"
-	"github.com/Milkado/api-ars-arcanum/transformer/magic_system"
 )
 
 func AllMagicSystems(ctx *gin.Context) {
-	var magicSystems []transformer.MagicSystem
-	database.DB.Preload("Shard").Preload("Powers").Find(&magicSystems)
+	var magicSystems []models.MagicSystem
+	var magicSystemsReturn []models.MagicSystemReturn
+	database.DB.Preload("Shard").Preload("Powers").Model(&magicSystems).Find(&magicSystemsReturn)
 	ctx.JSON(http.StatusOK, gin.H{"data": magicSystems})
 }
 
 func GetMagicSystem(ctx *gin.Context) {
 	id := ctx.Param("id")
-	var magicSystem transformer.MagicSystem
-	database.DB.Preload("Shard").First(&magicSystem, id)
+	var magicSystem models.MagicSystem
+	var magicSystemReturn models.MagicSystemReturn
+	database.DB.Preload("Shard").Model(&magicSystem).First(&magicSystemReturn, id)
 	ctx.JSON(http.StatusOK, gin.H{"data": magicSystem})
 }
 

@@ -5,20 +5,21 @@ import (
 
 	"github.com/Milkado/api-ars-arcanum/database"
 	"github.com/Milkado/api-ars-arcanum/models"
-	transformer "github.com/Milkado/api-ars-arcanum/transformer/shard"
 	"github.com/gin-gonic/gin"
 )
 
 func AllShards(ctx *gin.Context) {
-	var shards []transformer.Shard
-	database.DB.Preload("MagicSystems").Find(&shards)
-	ctx.JSON(http.StatusOK, gin.H{"data": shards})
+	var shards []models.Shard
+	var shardTransformed []models.ShardReturn
+	database.DB.Preload("MagicSystems").Model(&shards).Find(&shardTransformed)
+	ctx.JSON(http.StatusOK, gin.H{"data": shardTransformed})
 }
 
 func GetShard(ctx *gin.Context) {
 	id := ctx.Param("id")
-	var shard transformer.Shard
-	database.DB.Preload("MagicSystems").First(&shard, id)
+	var shard models.Shard
+	var shardTransformed models.ShardReturn
+	database.DB.Preload("MagicSystems").Model(&shard).First(&shardTransformed, id)
 	if shard.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Shard not found"})
 		return

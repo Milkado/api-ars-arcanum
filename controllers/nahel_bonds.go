@@ -7,20 +7,21 @@ import (
 
 	"github.com/Milkado/api-ars-arcanum/database"
 	"github.com/Milkado/api-ars-arcanum/models"
-	"github.com/Milkado/api-ars-arcanum/transformer/nahel_bond"
 	"github.com/gin-gonic/gin"
 )
 
 func AllNahelBonds(ctx *gin.Context) {
-	var nahelBonds []transformer.NahelBond
-	database.DB.Preload("Powers.MagicSystem").Find(&nahelBonds)
+	var nahelBonds []models.NahelBond
+	var nahelBondsReturn []models.NahelBondReturn
+	database.DB.Preload("Powers.MagicSystem").Model(&nahelBonds).Find(&nahelBondsReturn)
 	ctx.JSON(http.StatusOK, gin.H{"data": nahelBonds})
 }
 
 func GetNahelBond(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var nahelBond models.NahelBond
-	database.DB.Preload("Powers").First(&nahelBond, id)
+	var nahelBondReturn models.NahelBondReturn
+	database.DB.Preload("Powers.MagicSystem").Model(&nahelBond).First(&nahelBondReturn, id)
 	ctx.JSON(http.StatusOK, gin.H{"data": nahelBond})
 }
 

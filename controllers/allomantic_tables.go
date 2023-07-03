@@ -6,19 +6,20 @@ import (
 	"github.com/Milkado/api-ars-arcanum/database"
 	"github.com/Milkado/api-ars-arcanum/models"
 	"github.com/gin-gonic/gin"
-	"github.com/Milkado/api-ars-arcanum/transformer/allomantic_table"
 )
 
 func AllAllomanticTables(ctx *gin.Context) {
-	var allomanticTables []transformer.AllomanticTable
-	database.DB.Preload("Power.MagicSystem").Find(&allomanticTables)
+	var allomanticTables []models.AllomanticTable
+	var allomanticTablesTransformed []models.AllomanticTableReturn
+	database.DB.Preload("Power.MagicSystem").Model(&allomanticTables).Find(&allomanticTablesTransformed)
 	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTables})
 }
 
 func GetAllomanticTable(ctx *gin.Context) {
 	id := ctx.Param("id")
-	var allomanticTable transformer.AllomanticTable
-	database.DB.Preload("Power.MagicSystem").First(&allomanticTable, id)
+	var allomanticTable models.AllomanticTable
+	var allomanticTableTransformed models.AllomanticTableReturn
+	database.DB.Preload("Power.MagicSystem").Model(&allomanticTable).First(&allomanticTableTransformed, id)
 	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTable})
 }
 
