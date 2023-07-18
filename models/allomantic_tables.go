@@ -4,18 +4,52 @@ import "gorm.io/gorm"
 
 type AllomanticTable struct {
 	gorm.Model
-	Name string `json:"name"`
-	Physical string `json:"physical"`
+	Name        string `json:"name"`
+	Physical    string `json:"physical"`
 	Enhancement string `json:"enhancement"`
-	PowerID int `json:"power_id"`
-	Power Power `json:"power"`
+	PowerID     int    `json:"power_id"`
+	Power       Power  `json:"power"`
 }
 
-type AllomanticTableReturn struct {
-	ID uint `json:"id"`
-	Name string `json:"name"`
-	Physical string `json:"physical"`
+type AllomanticTableGet struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Physical    string `json:"physical"`
 	Enhancement string `json:"enhancement"`
-	PowerID int `json:"power_id"`
-	Power PowerReturn `json:"power" gorm:"foreignKey:PowerID"`
+	PowerID     int    `json:"power_id"`
+}
+
+type PowerForAllomanticTable struct {
+	ID            uint                          `json:"id"`
+	Name          string                        `json:"name"`
+	MagicSystemID int                           `json:"magic_system_id"`
+	MagicSystem   MagicSystemForAllomanticTable `json:"magic_system"`
+}
+
+type MagicSystemForAllomanticTable struct {
+	ID      uint                    `json:"id"`
+	Name    string                  `json:"name"`
+	ShardID uint                    `json:"shard_id"`
+	Shard   ShardForAllomanticTable `json:"shard"`
+}
+
+type ShardForAllomanticTable struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+func (AllomanticTableGet) TableName() string {
+	return "allomantic_tables"
+}
+
+func (PowerForAllomanticTable) TableName() string {
+	return "powers"
+}
+
+func (MagicSystemForAllomanticTable) TableName() string {
+	return "magic_systems"
+}
+
+func (ShardForAllomanticTable) TableName() string {
+	return "shards"
 }

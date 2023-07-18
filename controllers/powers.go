@@ -10,17 +10,17 @@ import (
 
 func AllPowers(ctx *gin.Context) {
 	var powers []models.Power
-	var powerTransformed []models.PowerReturn
-	database.DB.Preload("MagicSystem").Model(&powers).Find(&powerTransformed)
+	var powerTransformed []models.PowerGet
+	database.DB.Preload("MagicSystem.Shard").Model(&powers).Find(&powerTransformed)
 	ctx.JSON(http.StatusOK, gin.H{"data": powerTransformed})
 }
 
 func GetPower(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var power models.Power
-	var powerTransformed models.PowerReturn
-	database.DB.Preload("MagicSystem").Model(&power).First(&powerTransformed, id)
-	ctx.JSON(http.StatusOK, gin.H{"data": power})
+	var powerTransformed models.PowerGet
+	database.DB.Preload("MagicSystem.Shard").Model(&power).First(&powerTransformed, id)
+	ctx.JSON(http.StatusOK, gin.H{"data": powerTransformed})
 }
 
 func CreatePower(ctx *gin.Context) {

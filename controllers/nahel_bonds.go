@@ -12,17 +12,22 @@ import (
 
 func AllNahelBonds(ctx *gin.Context) {
 	var nahelBonds []models.NahelBond
-	var nahelBondsReturn []models.NahelBondReturn
-	database.DB.Preload("Powers.MagicSystem").Model(&nahelBonds).Find(&nahelBondsReturn)
-	ctx.JSON(http.StatusOK, gin.H{"data": nahelBonds})
+	var nahelBondsTransformed []models.NahelBondsGet
+	err := database.DB.Preload("Powers.MagicSystem.Shard").Model(&nahelBonds).Find(&nahelBondsTransformed).Error
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"data": nahelBondsTransformed})
 }
 
 func GetNahelBond(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var nahelBond models.NahelBond
-	var nahelBondReturn models.NahelBondReturn
-	database.DB.Preload("Powers.MagicSystem").Model(&nahelBond).First(&nahelBondReturn, id)
-	ctx.JSON(http.StatusOK, gin.H{"data": nahelBond})
+	var nahelBondsTransformed models.NahelBondsGet
+	database.DB.Preload("Powers.MagicSystem.Shard").Model(&nahelBond).First(&nahelBondsTransformed, id)
+	ctx.JSON(http.StatusOK, gin.H{"data": nahelBondsTransformed})
 }
 
 func CreateNahelBond(ctx *gin.Context) {

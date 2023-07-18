@@ -11,17 +11,23 @@ type MagicSystem struct {
 	Powers      []Power `json:"powers" gorm:"foreignKey:MagicSystemID"`
 }
 
-type MagicSystemReturn struct {
-	ID          uint   `json:"id"`
-	Name        string `json:"name"`
-	Prerequisit string `json:"prerequisit"`
-	ShardID     uint   `json:"shard_id"`
+type MagicSystemGet struct {
+	ID          uint                `json:"id"`
+	Name        string              `json:"name"`
+	Prerequisit string              `json:"prerequisit"`
+	ShardID     uint                `json:"shard_id"`
+	Shard       ShardForMagicSystem `json:"shard" gorm:"foreignKey:ShardID"`
 }
 
-type Tabler interface {
-	TableName() string
+type ShardForMagicSystem struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
 }
 
-func (MagicSystemReturn) TableName() string {
+func (MagicSystemGet) TableName() string {
 	return "magic_systems"
+}
+
+func (ShardForMagicSystem) TableName() string {
+	return "shards"
 }

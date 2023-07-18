@@ -10,15 +10,19 @@ import (
 
 func AllMagicSystems(ctx *gin.Context) {
 	var magicSystems []models.MagicSystem
-	var magicSystemsReturn []models.MagicSystemReturn
-	database.DB.Preload("Shard").Preload("Powers").Model(&magicSystems).Find(&magicSystemsReturn)
-	ctx.JSON(http.StatusOK, gin.H{"data": magicSystems})
+	var magicSystemTransformed []models.MagicSystemGet
+	err := database.DB.Preload("Shard").Model(&magicSystems).Find(&magicSystemTransformed).Error
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"data": magicSystemTransformed})
 }
 
 func GetMagicSystem(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var magicSystem models.MagicSystem
-	var magicSystemReturn models.MagicSystemReturn
+	var magicSystemReturn models.MagicSystemGet
 	database.DB.Preload("Shard").Model(&magicSystem).First(&magicSystemReturn, id)
 	ctx.JSON(http.StatusOK, gin.H{"data": magicSystem})
 }

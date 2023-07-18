@@ -10,17 +10,17 @@ import (
 
 func AllAllomanticTables(ctx *gin.Context) {
 	var allomanticTables []models.AllomanticTable
-	var allomanticTablesTransformed []models.AllomanticTableReturn
-	database.DB.Preload("Power.MagicSystem").Model(&allomanticTables).Find(&allomanticTablesTransformed)
-	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTables})
+	var allomanticTablesTransformed []models.AllomanticTableGet
+	database.DB.Preload("Power.MagicSystem.Shard").Model(&allomanticTables).Find(&allomanticTablesTransformed)
+	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTablesTransformed})
 }
 
 func GetAllomanticTable(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var allomanticTable models.AllomanticTable
-	var allomanticTableTransformed models.AllomanticTableReturn
-	database.DB.Preload("Power.MagicSystem").Model(&allomanticTable).First(&allomanticTableTransformed, id)
-	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTable})
+	var allomanticTableTransformed models.AllomanticTableGet
+	database.DB.Preload("Power.MagicSystem.Shard").Model(&allomanticTable).First(&allomanticTableTransformed, id)
+	ctx.JSON(http.StatusOK, gin.H{"data": allomanticTableTransformed})
 }
 
 func CreateAllomanticTable(ctx *gin.Context) {

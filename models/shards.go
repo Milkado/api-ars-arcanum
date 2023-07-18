@@ -10,10 +10,25 @@ type Shard struct {
 	MagicSystems []MagicSystem `json:"magic_systems"`
 }
 
-type ShardReturn struct {
-	ID           uint                `json:"id"`
-	Name         string              `json:"name"`
-	Vessel       string              `json:"vessel"`
-	Planet       string              `json:"planet"`
-	MagicSystems []MagicSystemReturn `json:"magic_systems" gorm:"foreignKey:ShardID"`
+type ShardGet struct {
+	ID          uint                  `json:"id"`
+	Name        string                `json:"name"`
+	Vessel      string                `json:"vessel"`
+	Planet      string                `json:"planet"`
+	MagicSystems []MagicSystemForShard `json:"magic_systems" gorm:"foreignKey:ShardID"`
+}
+
+type MagicSystemForShard struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Prerequisit string `json:"prerequisit"`
+	ShardID     uint   `json:"shard_id"`
+}
+
+func (ShardGet) TableName() string {
+	return "shards"
+}
+
+func (MagicSystemForShard) TableName() string {
+	return "magic_systems"
 }

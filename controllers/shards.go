@@ -10,7 +10,7 @@ import (
 
 func AllShards(ctx *gin.Context) {
 	var shards []models.Shard
-	var shardTransformed []models.ShardReturn
+	var shardTransformed []models.ShardGet
 	database.DB.Preload("MagicSystems").Model(&shards).Find(&shardTransformed)
 	ctx.JSON(http.StatusOK, gin.H{"data": shardTransformed})
 }
@@ -18,7 +18,7 @@ func AllShards(ctx *gin.Context) {
 func GetShard(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var shard models.Shard
-	var shardTransformed models.ShardReturn
+	var shardTransformed models.ShardGet
 	database.DB.Preload("MagicSystems").Model(&shard).First(&shardTransformed, id)
 	if shard.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Shard not found"})
@@ -63,7 +63,8 @@ func DeleteShard(ctx *gin.Context) {
 
 func GetShardTrashed(ctx *gin.Context) {
 	var shards []models.Shard
-	database.DB.Unscoped().Preload("MagicSystems").Where("deleted_at IS NOT NULL").Find(&shards)
+	var shardTransformed []models.ShardGet
+	database.DB.Unscoped().Preload("MagicSystems").Where("deleted_at IS NOT NULL").Model(&shards).Find(&shardTransformed)
 	ctx.JSON(http.StatusOK, gin.H{"data": shards})
 }
 
