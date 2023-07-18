@@ -34,6 +34,11 @@ func CreateShard(ctx *gin.Context) {
 		return
 	}
 
+	if err := models.ValidadeShard(&shard); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	database.DB.Create(&shard)
 	ctx.JSON(http.StatusCreated, gin.H{"data": shard})
 }
@@ -47,6 +52,11 @@ func UpdateShard(ctx *gin.Context) {
 		return
 	}
 	if err := ctx.ShouldBindJSON(&shard); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.ValidadeShard(&shard); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

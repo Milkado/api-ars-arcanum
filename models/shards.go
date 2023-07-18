@@ -1,12 +1,15 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gopkg.in/validator.v2"
+	"gorm.io/gorm"
+)
 
 type Shard struct {
 	gorm.Model
-	Name         string        `gorm:"type:text;not null" json:"name"`
-	Vessel       string        `gorm:"type:text;not null" json:"vessel"`
-	Planet       string        `gorm:"type:text;not null" json:"planet"`
+	Name         string        `gorm:"type:text;not null" json:"name" validate:"nonzero"`
+	Vessel       string        `gorm:"type:text;not null" json:"vessel" validate:"nonzero"`
+	Planet       string        `gorm:"type:text;not null" json:"planet" validate:"nonzero"`
 	MagicSystems []MagicSystem `json:"magic_systems"`
 }
 
@@ -31,4 +34,12 @@ func (ShardGet) TableName() string {
 
 func (MagicSystemForShard) TableName() string {
 	return "magic_systems"
+}
+
+func ValidadeShard(shard *Shard) error {
+	if err := validator.Validate(shard); err != nil {
+		return err
+	}
+
+	return nil
 }

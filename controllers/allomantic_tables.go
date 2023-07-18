@@ -30,6 +30,11 @@ func CreateAllomanticTable(ctx *gin.Context) {
 		return
 	}
 
+	if err := models.ValidadeAllomanticTable(&allomanticTable); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	database.DB.Create(&allomanticTable)
 	ctx.JSON(http.StatusCreated, gin.H{"data": allomanticTable})
 }
@@ -37,6 +42,11 @@ func CreateAllomanticTable(ctx *gin.Context) {
 func UpdateAllomanticTable(ctx *gin.Context) {
 	var allomanticTable models.AllomanticTable
 	if err := ctx.ShouldBindJSON(&allomanticTable); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.ValidadeAllomanticTable(&allomanticTable); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

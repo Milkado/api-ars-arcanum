@@ -40,10 +40,16 @@ func HandleAuthed(inc *gin.Engine) {
 	inc.PATCH("/power-restore/:id", controllers.RestorePower)
 
 	inc.POST("/nahel-bond", controllers.CreateNahelBond)
-	// r.PATCH("/nahel-bond/:id", controllers.UpdateNahelBond)
-	// r.DELETE("/nahel-bond/:id", controllers.DeleteNahelBond)
-	// r.GET("/nahel-bond-trashed", controllers.GetNahelBondTrashed)
-	// r.PATCH("/nahel-bond-restore/:id", controllers.RestoreNahelBond)
+	inc.PATCH("/nahel-bond/:id", controllers.UpdateNahelBond)
+	inc.DELETE("/nahel-bond/:id", controllers.DeleteNahelBond)
+	inc.GET("/nahel-bond-trashed", controllers.GetNahelBondTrashed)
+	inc.PATCH("/nahel-bond-restore/:id", controllers.RestoreNahelBond)
+
+	inc.POST("/allomantic-table", controllers.CreateAllomanticTable)
+	inc.PATCH("/allomantic-table/:id", controllers.UpdateAllomanticTable)
+	inc.DELETE("/allomantic-table/:id", controllers.DeleteAllomanticTable)
+	inc.GET("/allomantic-table-trashed", controllers.GetAllomanticTableTrashed)
+	inc.PATCH("/allomantic-table-restore/:id", controllers.RestoreAllomanticTable)
 }
 
 func HandleOpen(inc *gin.Engine) {
@@ -60,4 +66,7 @@ func HandleOpen(inc *gin.Engine) {
 
 	inc.GET("/nahel-bond", controllers.AllNahelBonds)
 	inc.GET("/nahel-bond/:id", controllers.GetNahelBond)
+
+	inc.GET("/allomantic-table", controllers.AllAllomanticTables)
+	inc.GET("/allomantic-table/:id", controllers.GetAllomanticTable)
 }

@@ -1,12 +1,15 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gopkg.in/validator.v2"
+	"gorm.io/gorm"
+)
 
 type Power struct {
 	gorm.Model
-	Name          string      `json:"name"`
-	Description   string      `json:"description"`
-	MagicSystemID int         `json:"magic_system_id"`
+	Name          string      `json:"name" validate:"nonzero"`
+	Description   string      `json:"description" validate:"nonzero"`
+	MagicSystemID int         `json:"magic_system_id" validate:"nonzero"`
 	MagicSystem   MagicSystem `json:"magic_system"`
 }
 
@@ -40,4 +43,12 @@ func (MagicSystemForPower) TableName() string {
 
 func (ShardForPower) TableName() string {
 	return "shards"
+}
+
+func ValidadePower(power *Power) error {
+	if err := validator.Validate(power); err != nil {
+		return err
+	}
+
+	return nil
 }

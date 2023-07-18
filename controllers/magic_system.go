@@ -34,6 +34,11 @@ func CreateMagicSystem(ctx *gin.Context) {
 		return
 	}
 
+	if err := models.ValidadeMagicSystem(&magicSystem); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	database.DB.Preload("Shard").Create(&magicSystem)
 	ctx.JSON(http.StatusCreated, gin.H{"data": magicSystem})
 }
@@ -41,6 +46,11 @@ func CreateMagicSystem(ctx *gin.Context) {
 func UpdateMagicSystem(ctx *gin.Context) {
 	var magicSystem models.MagicSystem
 	if err := ctx.ShouldBindJSON(&magicSystem); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.ValidadeMagicSystem(&magicSystem); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

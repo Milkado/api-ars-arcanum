@@ -30,6 +30,11 @@ func CreatePower(ctx *gin.Context) {
 		return
 	}
 
+	if err := models.ValidadePower(&power); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	database.DB.Preload("MagicSystem").Create(&power)
 	ctx.JSON(http.StatusCreated, gin.H{"data": power})
 }
@@ -37,6 +42,11 @@ func CreatePower(ctx *gin.Context) {
 func UpdatePower(ctx *gin.Context) {
 	var power models.Power
 	if err := ctx.ShouldBindJSON(&power); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.ValidadePower(&power); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

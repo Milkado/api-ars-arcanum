@@ -1,12 +1,15 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gopkg.in/validator.v2"
+	"gorm.io/gorm"
+)
 
 type NahelBond struct {
 	gorm.Model
-	Order     string  `json:"name"`
-	Spren     string  `json:"spren"`
-	Attribute string  `json:"attribute"`
+	Order     string  `json:"name" validate:"nonzero"`
+	Spren     string  `json:"spren" validate:"nonzero"`
+	Attribute string  `json:"attribute" validate:"nonzero"`
 	Powers    []Power `json:"powers,string" gorm:"many2many:nahel_bond_powers;"`
 }
 
@@ -52,4 +55,12 @@ func (MagicSystemForNahelBond) TableName() string {
 
 func (ShardForNahelBond) TableName() string {
 	return "shards"
+}
+
+func ValidadeNahelBond(nahelBond *NahelBond) error {
+	if err := validator.Validate(nahelBond); err != nil {
+		return err
+	}
+
+	return nil
 }

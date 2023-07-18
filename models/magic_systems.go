@@ -1,12 +1,15 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gopkg.in/validator.v2"
+	"gorm.io/gorm"
+)
 
 type MagicSystem struct {
 	gorm.Model
-	Name        string  `json:"name"`
-	Prerequisit string  `json:"prerequisit"`
-	ShardID     uint    `json:"shard_id"`
+	Name        string  `json:"name" validate:"nonzero"`
+	Prerequisit string  `json:"prerequisit" validate:"nonzero"`
+	ShardID     uint    `json:"shard_id" validate:"nonzero"`
 	Shard       Shard   `json:"shard"`
 	Powers      []Power `json:"powers" gorm:"foreignKey:MagicSystemID"`
 }
@@ -30,4 +33,12 @@ func (MagicSystemGet) TableName() string {
 
 func (ShardForMagicSystem) TableName() string {
 	return "shards"
+}
+
+func ValidadeMagicSystem(magicSystem *MagicSystem) error {
+	if err := validator.Validate(magicSystem); err != nil {
+		return err
+	}
+
+	return nil
 }
