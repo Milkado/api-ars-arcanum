@@ -7,10 +7,17 @@ import (
 
 type Shard struct {
 	gorm.Model
-	Name         string        `gorm:"type:text;not null" json:"name" validate:"nonzero"`
-	Vessel       string        `gorm:"type:text;not null" json:"vessel" validate:"nonzero"`
-	Planet       string        `gorm:"type:text;not null" json:"planet" validate:"nonzero"`
+	Name         string        `gorm:"type:text;not null" json:"name"`
+	Vessel       string        `gorm:"type:text;not null" json:"vessel"`
+	Planet       string        `gorm:"type:text;not null" json:"planet"`
 	MagicSystems []MagicSystem `json:"magic_systems"`
+}
+
+type ShardPost struct {
+	gorm.Model `swaggerignore:"true"`
+	Name   string `json:"name" validate:"nonzero"`
+	Vessel string `json:"vessel" validate:"nonzero"`
+	Planet string `json:"planet" validate:"nonzero"`
 }
 
 type ShardGet struct {
@@ -36,7 +43,7 @@ func (MagicSystemForShard) TableName() string {
 	return "magic_systems"
 }
 
-func ValidadeShard(shard *Shard) error {
+func ValidadeShard(shard *ShardPost) error {
 	if err := validator.Validate(shard); err != nil {
 		return err
 	}

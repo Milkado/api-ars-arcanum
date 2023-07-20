@@ -1,0 +1,354 @@
+definitions:
+  models.MagicSystemForShard:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      prerequisit:
+        type: string
+      shard_id:
+        type: integer
+    type: object
+  models.MagicSystemGet:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      prerequisit:
+        type: string
+      shard:
+        $ref: '#/definitions/models.ShardForMagicSystem'
+      shard_id:
+        type: integer
+    type: object
+  models.MagicSystemPost:
+    properties:
+      name:
+        type: string
+      prerequisit:
+        type: string
+      shard_id:
+        type: integer
+    type: object
+  models.ShardForMagicSystem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.ShardGet:
+    properties:
+      id:
+        type: integer
+      magic_systems:
+        items:
+          $ref: '#/definitions/models.MagicSystemForShard'
+        type: array
+      name:
+        type: string
+      planet:
+        type: string
+      vessel:
+        type: string
+    type: object
+  models.ShardPost:
+    properties:
+      name:
+        type: string
+      planet:
+        type: string
+      vessel:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /magic-systems:
+    get:
+      consumes:
+      - application/json
+      description: Route to get all existing magic systems
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MagicSystemGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all magic systems
+      tags:
+      - magic-systems
+    post:
+      consumes:
+      - application/json
+      description: Route to create a new magic system
+      parameters:
+      - description: Magic System Model
+        in: body
+        name: magicSystem
+        required: true
+        schema:
+          $ref: '#/definitions/models.MagicSystemPost'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.MagicSystemPost'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create a new magic system
+      tags:
+      - magic-systems
+  /magic-systems-restore/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Route to restore a trashed magic system
+      parameters:
+      - description: Magic System ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Restore a trashed magic system
+      tags:
+      - magic-systems
+  /magic-systems-trashed:
+    get:
+      consumes:
+      - application/json
+      description: Route to get all trashed magic systems
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MagicSystemGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all trashed magic systems
+      tags:
+      - magic-systems
+  /magic-systems/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Route to delete a magic system
+      parameters:
+      - description: Magic System ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete a magic system
+      tags:
+      - magic-systems
+    get:
+      consumes:
+      - application/json
+      description: Route to get a magic system by id
+      parameters:
+      - description: Magic System ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MagicSystemGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get magic system by id
+      tags:
+      - magic-systems
+    patch:
+      consumes:
+      - application/json
+      description: Route to update a magic system
+      parameters:
+      - description: Magic System ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Magic System Model
+        in: body
+        name: magicSystem
+        required: true
+        schema:
+          $ref: '#/definitions/models.MagicSystemPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MagicSystemPost'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Update a magic system
+      tags:
+      - magic-systems
+  /shards:
+    get:
+      consumes:
+      - application/json
+      description: Route to get all existing shards
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ShardGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all shards
+      tags:
+      - shards
+    post:
+      consumes:
+      - application/json
+      description: Route to create a new shard
+      parameters:
+      - description: Shard Model
+        in: body
+        name: shard
+        required: true
+        schema:
+          $ref: '#/definitions/models.ShardPost'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ShardPost'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create a new shard
+      tags:
+      - shards
+  /shards/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Route to get a shard by id
+      parameters:
+      - description: Shard ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ShardGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get shard by id
+      tags:
+      - shards
+    patch:
+      consumes:
+      - application/json
+      description: Route to update a shard
+      parameters:
+      - description: Shard ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Shard Model
+        in: body
+        name: shard
+        required: true
+        schema:
+          $ref: '#/definitions/models.ShardPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ShardPost'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Update a shard
+      tags:
+      - shards
+  /shards/trashed:
+    get:
+      consumes:
+      - application/json
+      description: Route to get all trashed shards
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ShardGet'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get trashed shards
+      tags:
+      - shards
+swagger: "2.0"

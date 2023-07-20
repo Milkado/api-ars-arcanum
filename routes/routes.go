@@ -6,10 +6,16 @@ import (
 	"github.com/Milkado/api-ars-arcanum/controllers"
 	"github.com/Milkado/api-ars-arcanum/middleware"
 	"github.com/gin-gonic/gin"
+	docs "github.com/Milkado/api-ars-arcanum/docs"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func HandleRequests() {
 	r := gin.Default()
+	docs.SwaggerInfo.BasePath = "/"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 
 	HandleOpen(r)
 	HandleAuthed(r)

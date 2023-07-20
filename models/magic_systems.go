@@ -14,6 +14,13 @@ type MagicSystem struct {
 	Powers      []Power `json:"powers" gorm:"foreignKey:MagicSystemID"`
 }
 
+type MagicSystemPost struct {
+	gorm.Model `swaggerignore:"true"`
+	Name       string `json:"name" validate:"nonzero"`
+	Prerequisit string `json:"prerequisit" validate:"nonzero"`
+	ShardID    uint   `json:"shard_id" validate:"nonzero"`
+}
+
 type MagicSystemGet struct {
 	ID          uint                `json:"id"`
 	Name        string              `json:"name"`
@@ -35,7 +42,7 @@ func (ShardForMagicSystem) TableName() string {
 	return "shards"
 }
 
-func ValidadeMagicSystem(magicSystem *MagicSystem) error {
+func ValidadeMagicSystem(magicSystem *MagicSystemPost) error {
 	if err := validator.Validate(magicSystem); err != nil {
 		return err
 	}
